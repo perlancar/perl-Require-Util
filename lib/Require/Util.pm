@@ -16,22 +16,22 @@ our $err;
 
 sub require_any {
     return 1 unless @_;
-    my $err;
+
+    my $func_err;
     for my $mod (@_) {
         my $mod_pm = $mod;
         if ($mod =~ /\A\w+(::\w+)*\z/) {
             ($mod_pm = "$mod.pm") =~ s!::!/!g;
         }
-        my $mod_err;
         try {
             require $mod_pm;
-        } catch ($mod_err) {
-            $err = $mod_err;
+        } catch ($e) {
+            $func_err = $e;
             next;
         };
         return $mod;
     }
-    die $err;
+    die $func_err;
 }
 
 sub try_require {
@@ -42,11 +42,10 @@ sub try_require {
         ($mod_pm = "$mod.pm") =~ s!::!/!g;
     }
 
-    my $mod_err;
     try {
         require $mod_pm;
-    } catch ($mod_err) {
-        $Require::Util::err = $mod_err;
+    } catch ($e) {
+        $Require::Util::err = $e;
         return 0;
     };
     1;
