@@ -58,6 +58,12 @@ sub try_require {
 
  use Require::Util qw(require_any try_require);
 
+ if (try_require "Foo::Bar") {
+     # use Foo::Bar's function
+ }
+
+ my $modname = require_any "Foo::Bar", "Baz/Qux.pm", "Quux";
+
 
 =head1 DESCRIPTION
 
